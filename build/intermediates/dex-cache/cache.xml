@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="C:\Users\Admin\.android\build-cache\7d3e7c710d3e820b428f2f07f246997dbebcbde8\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="f21927d22fe31889ecce94dd697a2e75b137e0ef">
+        <dex dex="D:\DOKI\PROJECTS\voiceAndroid\readySources\veravoice-master\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_8b20cfd466dfdd40c68a169a5988a1f34069aaad\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Admin\AppData\Local\Android\Sdk\extras\android\m2repository\com\android\support\support-annotations\20.0.0\support-annotations-20.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="9d9013e9ff35fc3756411e62873c363c70c638fa">
+        <dex dex="D:\DOKI\PROJECTS\voiceAndroid\readySources\veravoice-master\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-20.0.0_26ed92bd19e83dc693ce8b8a43ea217da558ca02\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Admin\.gradle\caches\modules-2\files-2.1\commons-io\commons-io\2.0.1\7ffdb02f95af1c1a208544e076cea5b8e66e731a\commons-io-2.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="7ffdb02f95af1c1a208544e076cea5b8e66e731a">
+        <dex dex="D:\DOKI\PROJECTS\voiceAndroid\readySources\veravoice-master\app\build\intermediates\transforms\dex\debug\folders\1000\10\commons-io-2.0.1_de0129c8579a202984bc96ddda0dbe17b72a8b37\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\DOKI\PROJECTS\voiceAndroid\readySources\veravoice-master\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="c323c36ecc68965c4cfb460f7721113d2b61ed03">
+        <dex dex="D:\DOKI\PROJECTS\voiceAndroid\readySources\veravoice-master\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_206d0af00efae77e8b8a93e4e7eeb8f194bfc68c\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\DOKI\PROJECTS\voiceAndroid\readySources\veravoice-master\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="be63223012b2050bf81b7bf8f3b4702678804933">
+        <dex dex="D:\DOKI\PROJECTS\voiceAndroid\readySources\veravoice-master\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_76728cb15eb6d2532effd09a33eb9b0e6f9c1f10\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Admin\.android\build-cache\b46edbb46005ab55ba9e1cde0336e79a2d7458eb\output\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="8694693636ab36910c8100ce527c258ff3ebece0">
+        <dex dex="D:\DOKI\PROJECTS\voiceAndroid\readySources\veravoice-master\app\build\intermediates\transforms\dex\debug\folders\1000\10\classes_842cc02fcdb13a358df0036d9bd91ac8e082321b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Admin\.android\build-cache\b46edbb46005ab55ba9e1cde0336e79a2d7458eb\output\jars\libs\internal_impl-20.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d">
+        <dex dex="D:\DOKI\PROJECTS\voiceAndroid\readySources\veravoice-master\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-20.0.0_d55d4e8224b5d78f4dad4cffdfe575bc09d2d2b8\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="D:\DOKI\PROJECTS\voiceAndroid\readySources\veravoice-master\app\libs\pocketsphinx-android-5prealpha-nolib.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.0"
+        sha1="54fcac1e97536fbe5ace1741e9068ff09864b403">
+        <dex dex="D:\DOKI\PROJECTS\voiceAndroid\readySources\veravoice-master\app\build\intermediates\transforms\dex\debug\folders\1000\2\pocketsphinx-android-5prealpha-nolib_3aa034cca166b95a8946ae720cc828ab355716fb\classes.dex" />
+    </item>
+
+</items>
