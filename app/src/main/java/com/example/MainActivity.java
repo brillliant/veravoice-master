@@ -1,6 +1,8 @@
 package com.example;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -11,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.tts.TextToSpeech;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
@@ -151,6 +154,13 @@ public class MainActivity extends Activity implements RecognitionListener, Senso
     private void setupRecognizer() {
         //if (mController == null) return;
         final String hotword = getString(R.string.hotword);
+
+        if(ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+            System.out.println("everything is OK! permission is garanted");
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
+        }
+
         new AsyncTask<Void, Void, Exception>() {
             @Override
             protected Exception doInBackground(Void... params) {
@@ -168,17 +178,22 @@ public class MainActivity extends Activity implements RecognitionListener, Senso
                     File hmmDir = new File(dataFiles.getHmm());
                     File dict = new File(dataFiles.getDict());
                     File jsgf = new File(dataFiles.getJsgf());
-                    copyAssets(hmmDir);
-                    saveFile(jsgf, grammar.getJsgf());
-                    saveFile(dict, grammar.getDict());
-                    mRecognizer = SpeechRecognizerSetup.defaultSetup()
-                            .setAcousticModel(hmmDir)
-                            .setDictionary(dict)
-                            .setBoolean("-remove_noise", false)
-                            .setKeywordThreshold(1e-7f)
-                            .getRecognizer();
-                    mRecognizer.addKeyphraseSearch(KWS_SEARCH, hotword);
-                    mRecognizer.addGrammarSearch(COMMAND_SEARCH, jsgf);
+
+                    if(ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+                        copyAssets(hmmDir);
+                        saveFile(jsgf, grammar.getJsgf());
+                        saveFile(dict, grammar.getDict());
+                        mRecognizer = SpeechRecognizerSetup.defaultSetup()
+                                .setAcousticModel(hmmDir)
+                                .setDictionary(dict)
+                                .setBoolean("-remove_noise", false)
+                                .setKeywordThreshold(1e-7f)
+                                .getRecognizer();
+                        mRecognizer.addKeyphraseSearch(KWS_SEARCH, hotword);
+                        mRecognizer.addGrammarSearch(COMMAND_SEARCH, jsgf);
+                    } else {
+                        System.out.println("no permission for writing files");
+                    }
                 } catch (IOException e) {
                     return e;
                 }
