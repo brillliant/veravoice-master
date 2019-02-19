@@ -161,6 +161,12 @@ public class MainActivity extends Activity implements RecognitionListener, Senso
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
         }
 
+        if(ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO)== PackageManager.PERMISSION_GRANTED){
+            System.out.println("everything is OK! permission for AUDIO record is garanted");
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},1);
+        }
+
         new AsyncTask<Void, Void, Exception>() {
             @Override
             protected Exception doInBackground(Void... params) {
@@ -180,17 +186,21 @@ public class MainActivity extends Activity implements RecognitionListener, Senso
                     File jsgf = new File(dataFiles.getJsgf());
 
                     if(ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
-                        copyAssets(hmmDir);
-                        saveFile(jsgf, grammar.getJsgf());
-                        saveFile(dict, grammar.getDict());
-                        mRecognizer = SpeechRecognizerSetup.defaultSetup()
-                                .setAcousticModel(hmmDir)
-                                .setDictionary(dict)
-                                .setBoolean("-remove_noise", false)
-                                .setKeywordThreshold(1e-7f)
-                                .getRecognizer();
-                        mRecognizer.addKeyphraseSearch(KWS_SEARCH, hotword);
-                        mRecognizer.addGrammarSearch(COMMAND_SEARCH, jsgf);
+                        if(ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO)== PackageManager.PERMISSION_GRANTED) {
+                            copyAssets(hmmDir);
+                            saveFile(jsgf, grammar.getJsgf());
+                            saveFile(dict, grammar.getDict());
+                            mRecognizer = SpeechRecognizerSetup.defaultSetup()
+                                    .setAcousticModel(hmmDir)
+                                    .setDictionary(dict)
+                                    .setBoolean("-remove_noise", false)
+                                    .setKeywordThreshold(1e-7f)
+                                    .getRecognizer();
+                            mRecognizer.addKeyphraseSearch(KWS_SEARCH, hotword);
+                            mRecognizer.addGrammarSearch(COMMAND_SEARCH, jsgf);
+                        } else {
+                            System.out.println("no permission for record audio");
+                        }
                     } else {
                         System.out.println("no permission for writing files");
                     }
@@ -278,6 +288,16 @@ public class MainActivity extends Activity implements RecognitionListener, Senso
         }
     }
 
+    @Override
+    public void onError(Exception e) {
+
+    }
+
+    @Override
+    public void onTimeout() {
+
+    }
+
     private void startStopRecognition() {
         if (mRecognizer == null) return;
         if (KWS_SEARCH.equals(mRecognizer.getSearchName())) {
@@ -335,7 +355,7 @@ public class MainActivity extends Activity implements RecognitionListener, Senso
     }
 
     private void process(final String text) {
-        new AsyncTask<String, Void, List<Device>>() {
+/*        new AsyncTask<String, Void, List<Device>>() {
             @Override
             protected List<Device> doInBackground(String... params) {
                 return mController.getDevices(params[0]);
@@ -351,7 +371,9 @@ public class MainActivity extends Activity implements RecognitionListener, Senso
                     }
                 }
             }
-        }.execute(text);
+        }.execute(text);*/
+        System.out.println("ура:" + text);
+        Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
     }
 
     private void speak(String text) {
