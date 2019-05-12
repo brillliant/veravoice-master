@@ -87,23 +87,25 @@ public class MainActivity extends Activity implements RecognitionListener, Senso
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setupController();
+        //setupController();
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         Sensor sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         if (sensor != null) {
             mSensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
             mSensorMaximum = sensor.getMaximumRange();
         }
-        mTextToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status == TextToSpeech.ERROR) return;
-                if (mTextToSpeech.isLanguageAvailable(Locale.getDefault()) == TextToSpeech.LANG_AVAILABLE) {
-                    mTextToSpeech.setLanguage(Locale.getDefault());
-                }
-                mTextToSpeech.setOnUtteranceCompletedListener(mUtteranceCompletedListener);
-            }
-        });
+
+        setupRecognizer();
+//        mTextToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+//            @Override
+//            public void onInit(int status) {
+//                if (status == TextToSpeech.ERROR) return;
+//                if (mTextToSpeech.isLanguageAvailable(Locale.getDefault()) == TextToSpeech.LANG_AVAILABLE) {
+//                    mTextToSpeech.setLanguage(Locale.getDefault());
+//                }
+//                mTextToSpeech.setOnUtteranceCompletedListener(mUtteranceCompletedListener);
+//            }
+//        });
         mMicView = findViewById(R.id.mic);
         mMicView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -130,42 +132,51 @@ public class MainActivity extends Activity implements RecognitionListener, Senso
         super.onDestroy();
     }
 
-    private void setupController() {
-        new AsyncTask<Void, Void, Controller>() {
-            @Override
-            protected Controller doInBackground(Void... params) {
-                Controller controller = new Controller();
-                return controller.initialize() ? controller : null;
-            }
+//    private void setupController() {
+//        new AsyncTask<Void, Void, Controller>() {
+//            @Override
+//            protected Controller doInBackground(Void... params) {
+//                Controller controller = new Controller();
+//                return controller.initialize() ? controller : null;
+//            }
+//
+//            @Override
+//            protected void onPostExecute(Controller controller) {
+//                mController = controller;
+//                //if (controller == null) {
+//                    Toast.makeText(MainActivity.this, "Controller is not found", Toast.LENGTH_SHORT).show();
+//                //} else {
+//                    Toast.makeText(MainActivity.this, "Controller is found! Please wait...", Toast.LENGTH_SHORT).show();
+//                    setupRecognizer();
+//                //}
+//            }
+//        }.execute();
+//    }
 
-            @Override
-            protected void onPostExecute(Controller controller) {
-                mController = controller;
-                //if (controller == null) {
-                    Toast.makeText(MainActivity.this, "Controller is not found", Toast.LENGTH_SHORT).show();
-                //} else {
-                    Toast.makeText(MainActivity.this, "Controller is found! Please wait...", Toast.LENGTH_SHORT).show();
-                    setupRecognizer();
-                //}
-            }
-        }.execute();
+    private void checkOrSetPermissions() throws InterruptedException {
+//        if(ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+//            System.out.println("everything is OK! permission is garanted");
+//        } else {
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
+//        }
+//
+//        if(ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO)== PackageManager.PERMISSION_GRANTED){
+//            System.out.println("everything is OK! permission for AUDIO record is garanted");
+//        } else {
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},1);
+//        }
+
+        PermissionChecker permissionChecker = new PermissionChecker(this, getApplicationContext());
+        permissionChecker.start();
+        //permissionChecker.join();
     }
 
     private void setupRecognizer() {
         //if (mController == null) return;
-        final String hotword = getString(R.string.hotword);
+        final String hotword = "слушай команду";
+        //getString(R.string.hotword);
 
-        if(ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
-            System.out.println("everything is OK! permission is garanted");
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
-        }
 
-        if(ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.RECORD_AUDIO)== PackageManager.PERMISSION_GRANTED){
-            System.out.println("everything is OK! permission for AUDIO record is garanted");
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},1);
-        }
 
         new AsyncTask<Void, Void, Exception>() {
             @Override
@@ -176,6 +187,13 @@ public class MainActivity extends Activity implements RecognitionListener, Senso
 //                    for (int i = 0; i < names.length; i++) {
 //                        names[i] = devices.get(i).name;
 //                    }
+
+                    try {
+                        checkOrSetPermissions();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    //, "повтори вопрос", "вариант а", "вариант бэ", "вариант цэ", "вариант цэ", "вариант дэ", "звонок другу", "подтверждаю", "отмена"
                     String[] names = (String[]) Arrays.asList("да", "нет").toArray();
                     PhonMapper phonMapper = new PhonMapper(getAssets().open("dict/ru/hotwords"));
                     Grammar grammar = new Grammar(names, phonMapper);
@@ -203,9 +221,12 @@ public class MainActivity extends Activity implements RecognitionListener, Senso
                         }
                     } else {
                         System.out.println("no permission for writing files");
+                        checkOrSetPermissions();
                     }
                 } catch (IOException e) {
                     return e;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 return null;
             }
@@ -280,8 +301,8 @@ public class MainActivity extends Activity implements RecognitionListener, Senso
         String text = hypothesis != null ? hypothesis.getHypstr() : null;
         Log.d(TAG, "onResult " + text);
         if (text != null) {
-            Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-            process(text);
+            Toast.makeText(this, "распознанная команда: " + text, Toast.LENGTH_LONG).show();
+            //process(text);
         }
         if (COMMAND_SEARCH.equals(mRecognizer.getSearchName())) {
             mRecognizer.startListening(KWS_SEARCH);
@@ -299,7 +320,9 @@ public class MainActivity extends Activity implements RecognitionListener, Senso
     }
 
     private void startStopRecognition() {
-        if (mRecognizer == null) return;
+        if (mRecognizer == null) {
+            System.out.println("mRecognizer не задан. ошибка");
+        }
         if (KWS_SEARCH.equals(mRecognizer.getSearchName())) {
             startRecognition();
         } else {
@@ -372,8 +395,6 @@ public class MainActivity extends Activity implements RecognitionListener, Senso
                 }
             }
         }.execute(text);*/
-        System.out.println("ура:" + text);
-        Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
     }
 
     private void speak(String text) {
