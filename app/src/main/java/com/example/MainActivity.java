@@ -173,7 +173,8 @@ public class MainActivity extends Activity implements RecognitionListener, Senso
 
     private void setupRecognizer() {
         //if (mController == null) return;
-        final String hotword = "слушай команду";
+        //final String hotword = "слушай команду";
+        final String hotword = "умный дом";
         //getString(R.string.hotword);
 
 
